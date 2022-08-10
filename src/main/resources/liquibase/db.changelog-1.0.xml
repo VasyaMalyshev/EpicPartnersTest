@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.0.0" author="vasiliy.malyshev">
+        <createTable tableName="counter">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="counter_id" type="varchar(10)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="count" type="bigint">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.1" author="vasiliy.malyshev">
+        <insert tableName="counter">
+            <column name="id" value="1"/>
+            <column name="counter_id" value="asdasd"/>
+            <column name="count" value="12"/>
+        </insert>
+
+        <insert tableName="counter">
+            <column name="id" value="2"/>
+            <column name="counter_id" value="zxczxc"/>
+            <column name="count" value="56"/>
+        </insert>
+
+        <insert tableName="counter">
+            <column name="id" value="3"/>
+            <column name="counter_id" value="qweqwe"/>
+            <column name="count" value="45"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
