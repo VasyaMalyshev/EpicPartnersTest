@@ -12,12 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.malyshev.epicpartnerstest.model.Counter;
 import ru.malyshev.epicpartnerstest.service.CounterService;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/counters")
 public class CounterController {
     private final CounterService counterService;
+    @GetMapping
+    public ResponseEntity<?> getCounters() {
 
+        List<Counter> allCounters = counterService.getAllCounters();
+
+        return new ResponseEntity<>(allCounters, HttpStatus.OK);
+    }
     @GetMapping(value = "/{counterId}")
     public ResponseEntity<?> getCountById(@PathVariable(name = "counterId") String counterId) {
 

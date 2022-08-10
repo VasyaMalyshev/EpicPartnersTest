@@ -5,62 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Счетчик</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script>
+        function show(shown, hidden) {
+            document.getElementById(shown).style.display='block';
+            document.getElementById(hidden).style.display='none';
+            return false;
+        }
+    </script>
 </head>
 
 <body>
 <!--Верхняя панель-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Панель навигации</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <a class="navbar-brand" href="#"></a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="#">Главная</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Ссылка</a>
-            </li>
         </ul>
     </div>
 </nav>
+<div id="Page1">
+    <div class="container">
+        <div id="counts">
 
-<!--Нижняя панель-->
-<div class="container">
-    <div id="counts">
-      <!--  <div class='form-check' id="${id}">
-            <label class="form-check-label">
-                <input type="checkbox" class="form-check-input">
-                <h6>${counterId}</h6>
-            </label>
-        </div>-->
+        </div>
     </div>
 </div>
 
+<div id="Page2" style="display:none">
+    <div id="counts2"></div>
+
+</div>
+<!--Нижняя панель-->
+
 <script type="text/javascript">
-    async function getCount(id) {
-        const res = await fetch(`http://localhost:8081/counter/${id}`, {method: 'GET',
+    let _counterId = '';
+    let _count = '';
+
+    async function getCounts() {
+        const res = await fetch(`http://localhost:8081/counters`, {method: 'GET',
             headers: {'Content-Type' : 'application/json'}
         });
         const counter = await res.json();
         console.log(counter);
-        res.forEach(counts => countToHtml(counts))
+        counter.forEach(counter => countToHtml(counter))
     }
-    getCount('asdasd')
+
+    async function incrementCount() {
+        console.log('incrementcount')
+        const input = document.getElementById('inputInk');
+        const count = input.value;
+
+        if (count) {
+            const res = await fetch(`http://localhost:8081/counters`, {method: 'POST',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({counterId: _counterId, count})
+            })
+            const todo = await res.json();
+            console.log(todo);
+            _count = todo;
+            document.getElementById('_count').innerHTML = _count;
+        }
+    }
+    function showCounter(counterId, count) {
+
+        _counterId = counterId;
+        _count = count;
+        show('Page2','Page1')
+        const countList = document.getElementById('counts2');
+        countList.insertAdjacentHTML('beforeend', `
+    <div class="container">
+        <div><h6>Имя счетчика: </h6></div>
+        <div>${_counterId}</div>
+        <br/>
+        <div><h6>Значение: </h6></div>
+        <div id="_count">${_count}</div>
+        <br/>
+        <div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Инкремент</label>
+                <br/>
+                <input id="inputInk" class="form-control" id="exampleInputEmail1"  placeholder="Enter increment">
+            </div>
+            <button id="toInk" class="btn btn-primary" onclick="incrementCount()">Submit</button>
+        </div>
+        <br/>
+        <div><a href="#" onclick="return show('Page1','Page2');">Обратно</a></div>
+    </div>
+    `)
+    }
+
+    getCounts()
     //window.addEventListener('DOMContentLoaded', getCount);
 
     function countToHtml({id, counterId, count}) {
         const countList = document.getElementById('counts');
         countList.insertAdjacentHTML('beforeend', `
-        <div class='form-check' id="${id}">
-            <label class="form-check-label">
-                <input type="checkbox" class="form-check-input">
-                <h1>${counterId}</h1>
-                <h1>${count}</h1>
-            </label>
-        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">CounterID</th>
+                    <th scope="col">Count</th>
+                    <th scope="col">Increment</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>${id}</td>
+                    <td>${counterId}</td>
+                    <td>${count}</td>
+                    <td>
+                        <button class="btn btn-info edit-btn"
+                                 onclick="showCounter('${counterId}', '${count}')"
+                                >Show
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     `)
+
     }
 </script>
 
