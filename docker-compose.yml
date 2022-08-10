@@ -1,17 +1,17 @@
 version: '3.9'
 services:
   db:
-    image: mysql:alpine
+    image: mysql:5.7
     container_name: mysql
     ports:
       - "3307:3306"
     volumes:
-      - db-data:/var/lib/mysql/
+      - db-data:/var/lib/mysql
     environment:
-      POSTGRES_DB: EpicPartners
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: 09po:L?>
-      #restart: always
+      MYSQL_DATABASE: epicpartners
+      MYSQL_PASSWORD: 09po:L?>
+      MYSQL_ROOT_PASSWORD: 09po:L?>
+      restart: always
     networks:
       - epic-localhost
   back:
@@ -19,10 +19,9 @@ services:
     container_name: back
     depends_on:
       - db
-    #restart: always
+    restart: always
     ports:
-      - "8075:8075"
-      - "8983:8983"
+      - "8081:8081"
     environment:
       DB_HOST: db
     networks:

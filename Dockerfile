@@ -1,5 +1,5 @@
 ARG BUILDDIR=/data
-ARG APP_PREFIX=depoit
+ARG APP_PREFIX=EpicPartnersTest
 
 FROM maven:3.6.3-openjdk-17 AS builder
 ARG BUILDDIR
@@ -21,5 +21,5 @@ VOLUME /data
 ENV TZ Europe/Moscow
 ARG JAR_FILE
 COPY --from=builder ${BUILDDIR}/target/${APP_PREFIX}-*.jar app.jar
-EXPOSE 8075 8983
+EXPOSE 8081
 ENTRYPOINT java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar app.jar

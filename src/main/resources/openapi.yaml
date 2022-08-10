@@ -1,0 +1,74 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8081
+    description: Generated server url
+paths:
+  /counters:
+    get:
+      tags:
+        - counter-controller
+      operationId: getCounters
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Bad Request
+    post:
+      tags:
+        - counter-controller
+      operationId: implementCount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Counter'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Bad Request
+  /counters/{counterId}:
+    get:
+      tags:
+        - counter-controller
+      operationId: getCountById
+      parameters:
+        - name: counterId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Bad Request
+components:
+  schemas:
+    Counter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        counterId:
+          type: string
+        count:
+          type: integer
+          format: int32
